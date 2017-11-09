@@ -872,6 +872,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// Keep a snapshot of the request attributes in case of an include,
 		// to be able to restore the original attributes after the include.
+        //首先判定是不是include请求如果是的话对request的attribute做个快照备份。
 		Map<String, Object> attributesSnapshot = null;
 		if (WebUtils.isIncludeRequest(request)) {
 			attributesSnapshot = new HashMap<String, Object>();
@@ -901,6 +902,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			doDispatch(request, response);
 		}
 		finally {
+		    //处理完后进行还原
 			if (!WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
 				// Restore the original attribute snapshot, in case of an include.
 				if (attributesSnapshot != null) {
