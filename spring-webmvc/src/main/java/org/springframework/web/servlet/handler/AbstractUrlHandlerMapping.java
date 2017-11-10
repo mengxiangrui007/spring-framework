@@ -159,10 +159,10 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 	 * @see org.springframework.util.AntPathMatcher
 	 */
 	protected Object lookupHandler(String urlPath, HttpServletRequest request) throws Exception {
-		// Direct match?
+		// Direct match? 直接从Handler Map中匹配
 		Object handler = this.handlerMap.get(urlPath);
 		if (handler != null) {
-			// Bean name or resolved handler?
+			// Bean name or resolved handler? 如果是String类型则从容器中获取
 			if (handler instanceof String) {
 				String handlerName = (String) handler;
 				handler = getApplicationContext().getBean(handlerName);
@@ -243,7 +243,7 @@ public abstract class AbstractUrlHandlerMapping extends AbstractHandlerMapping i
 	protected void validateHandler(Object handler, HttpServletRequest request) throws Exception {
 	}
 
-	/**
+	/** 将获取到的Handler注册两个PathExposingHandlerInterceptor、UriTemplateVariablesHandlerInterceptor拦截器
 	 * Build a handler object for the given raw handler, exposing the actual
 	 * handler, the {@link #PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE}, as well as
 	 * the {@link #URI_TEMPLATE_VARIABLES_ATTRIBUTE} before executing the handler.

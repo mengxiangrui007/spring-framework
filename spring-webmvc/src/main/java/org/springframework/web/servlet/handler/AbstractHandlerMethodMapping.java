@@ -211,11 +211,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 					}
 				}
 				if (beanType != null && isHandler(beanType)) {
-					detectHandlerMethods(beanName);
+					detectHandlerMethods(beanName); //负责将Handler保存在Map中
 				}
 			}
 		}
-		handlerMethodsInitialized(getHandlerMethods());
+		handlerMethodsInitialized(getHandlerMethods());//对Handler方法进行初始化
 	}
 
 	/**
@@ -338,7 +338,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	protected HandlerMethod lookupHandlerMethod(String lookupPath, HttpServletRequest request) throws Exception {
 		List<Match> matches = new ArrayList<Match>();
-		List<T> directPathMatches = this.mappingRegistry.getMappingsByUrl(lookupPath);
+		List<T> directPathMatches = this.mappingRegistry.getMappingsByUrl(lookupPath); //根据lookupPath获取匹配条件
 		if (directPathMatches != null) {
 			addMatchingMappings(directPathMatches, matches, request);
 		}

@@ -160,7 +160,7 @@ public abstract class BeanFactoryUtils {
 		return result;
 	}
 
-	/**
+	/**获取所有Spring Bean的名称
 	 * Get all bean names for the given type, including those defined in ancestor
 	 * factories. Will return unique names in case of overridden bean definitions.
 	 * <p>Does consider objects created by FactoryBeans, which means that FactoryBeans
