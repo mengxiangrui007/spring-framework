@@ -243,8 +243,11 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 */
 	@Override
 	protected void initApplicationContext() throws BeansException {
+		//操作子类添加或者修改Interceptor的入口
 		extendInterceptors(this.interceptors);
+		//用于将Spring MVC中所有容器中的MappedInterceptor类型的Bean添加到mappedInterceptors属性
 		detectMappedInterceptors(this.adaptedInterceptors);
+		//初始化Interceptors
 		initInterceptors();
 	}
 
@@ -349,6 +352,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 	 */
 	@Override
 	public final HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+		//1.查找Handler
 		Object handler = getHandlerInternal(request);
 		if (handler == null) {
 			handler = getDefaultHandler();
@@ -361,9 +365,9 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 			String handlerName = (String) handler;
 			handler = getApplicationContext().getBean(handlerName);
 		}
-
+		//2.为Handler添加拦截器
 		HandlerExecutionChain executionChain = getHandlerExecutionChain(handler, request);
-		if (CorsUtils.isCorsRequest(request)) {
+		if (CorsUtils.isCorsRequest(request)) {//检测当前请求是否为跨域请求
 			CorsConfiguration globalConfig = this.globalCorsConfigSource.getCorsConfiguration(request);
 			CorsConfiguration handlerConfig = getCorsConfiguration(handler, request);
 			CorsConfiguration config = (globalConfig != null ? globalConfig.combine(handlerConfig) : handlerConfig);
@@ -392,7 +396,7 @@ public abstract class AbstractHandlerMapping extends WebApplicationObjectSupport
 
 	/**
 	 * Build a {@link HandlerExecutionChain} for the given handler, including
-	 * applicable interceptors.
+	 * applicable interceptors.为Handler绑定可适用的Interceptors
 	 * <p>The default implementation builds a standard {@link HandlerExecutionChain}
 	 * with the given handler, the handler mapping's common interceptors, and any
 	 * {@link MappedInterceptor}s matching to the current request URL. Interceptors
