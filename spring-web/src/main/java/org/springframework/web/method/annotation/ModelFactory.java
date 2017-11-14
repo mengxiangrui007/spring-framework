@@ -103,10 +103,10 @@ public final class ModelFactory {
 	 */
 	public void initModel(NativeWebRequest request, ModelAndViewContainer container,
 			HandlerMethod handlerMethod) throws Exception {
-
+		//从sessionAttributes中去除保存的参数，并合并到container中
 		Map<String, ?> sessionAttributes = this.sessionAttributesHandler.retrieveAttributes(request);
 		container.mergeAttributes(sessionAttributes);
-		invokeModelAttributeMethods(request, container);
+		invokeModelAttributeMethods(request, container); //执行注释了@ModelAttributes的方法并将结果设置到Model
 
 		for (String name : findSessionAttributeArguments(handlerMethod)) {
 			if (!container.containsAttribute(name)) {
