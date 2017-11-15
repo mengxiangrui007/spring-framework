@@ -128,12 +128,12 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
 			Object handler, Exception ex) {
 
-		if (shouldApplyTo(request, handler)) {
+		if (shouldApplyTo(request, handler)) {//方法判定当前ExeceptionResolver是否可以解析所传入处理器所抛出的异常
 			if (this.logger.isDebugEnabled()) {
 				this.logger.debug("Resolving exception from handler [" + handler + "]: " + ex);
 			}
-			prepareResponse(ex, response);
-			ModelAndView result = doResolveException(request, response, handler, ex);
+			prepareResponse(ex, response);//设置response 判定是否给response设置警用缓存的属性
+			ModelAndView result = doResolveException(request, response, handler, ex);//设计解析异常
 			if (result != null) {
 				logException(ex, request);
 			}
@@ -159,10 +159,10 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	 */
 	protected boolean shouldApplyTo(HttpServletRequest request, Object handler) {
 		if (handler != null) {
-			if (this.mappedHandlers != null && this.mappedHandlers.contains(handler)) {
+			if (this.mappedHandlers != null && this.mappedHandlers.contains(handler)) {	//mappedHandlers用于配置处理器的集合
 				return true;
 			}
-			if (this.mappedHandlerClasses != null) {
+			if (this.mappedHandlerClasses != null) {//mappedHandlerClasses用于配置处理器类型的集合
 				for (Class<?> handlerClass : this.mappedHandlerClasses) {
 					if (handlerClass.isInstance(handler)) {
 						return true;

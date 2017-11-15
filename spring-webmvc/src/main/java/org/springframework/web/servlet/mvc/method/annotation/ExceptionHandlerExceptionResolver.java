@@ -359,7 +359,7 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 	protected ModelAndView doResolveHandlerMethodException(HttpServletRequest request,
 			HttpServletResponse response, HandlerMethod handlerMethod, Exception exception) {
 
-		ServletInvocableHandlerMethod exceptionHandlerMethod = getExceptionHandlerMethod(handlerMethod, exception);
+		ServletInvocableHandlerMethod exceptionHandlerMethod = getExceptionHandlerMethod(handlerMethod, exception); //找到处理异常的方法 @See RequestMappingHandlerAdapter
 		if (exceptionHandlerMethod == null) {
 			return null;
 		}

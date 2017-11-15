@@ -47,15 +47,15 @@ public class SimpleMappingExceptionResolver extends AbstractHandlerExceptionReso
 	public static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
 
 
-	private Properties exceptionMappings;
+	private Properties exceptionMappings;//用于配置异常类和viewName的对应关系
 
-	private Class<?>[] excludedExceptions;
+	private Class<?>[] excludedExceptions;//用于配置不处理的异常
 
 	private String defaultErrorView;
 
 	private Integer defaultStatusCode;
 
-	private Map<String, Integer> statusCodes = new HashMap<String, Integer>();
+	private Map<String, Integer> statusCodes = new HashMap<String, Integer>();//用于配置解析出的viewName和statusCode对应关系
 
 	private String exceptionAttribute = DEFAULT_EXCEPTION_ATTRIBUTE;
 
@@ -176,7 +176,7 @@ public class SimpleMappingExceptionResolver extends AbstractHandlerExceptionReso
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response,
 			Object handler, Exception ex) {
 
-		// Expose ModelAndView for chosen error view.
+		// Expose ModelAndView for chosen error view. 根据异常查找显示错误页面的逻辑视图
 		String viewName = determineViewName(ex, request);
 		if (viewName != null) {
 			// Apply HTTP status code for error views, if specified.
@@ -203,7 +203,7 @@ public class SimpleMappingExceptionResolver extends AbstractHandlerExceptionReso
 	 */
 	protected String determineViewName(Exception ex, HttpServletRequest request) {
 		String viewName = null;
-		if (this.excludedExceptions != null) {
+		if (this.excludedExceptions != null) { //如果异常在设置的excludedExceptions中包含则返回null
 			for (Class<?> excludedEx : this.excludedExceptions) {
 				if (excludedEx.equals(ex.getClass())) {
 					return null;
