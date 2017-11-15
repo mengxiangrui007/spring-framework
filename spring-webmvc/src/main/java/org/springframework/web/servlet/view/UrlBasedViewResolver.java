@@ -453,18 +453,18 @@ public class UrlBasedViewResolver extends AbstractCachingViewResolver implements
 	protected View createView(String viewName, Locale locale) throws Exception {
 		// If this resolver is not supposed to handle the given view,
 		// return null to pass on to the next resolver in the chain.
-		if (!canHandle(viewName, locale)) {
+		if (!canHandle(viewName, locale)) {//检查是否支持此逻辑视图，可以配置支持的模板。
 			return null;
 		}
 		// Check for special "redirect:" prefix.
-		if (viewName.startsWith(REDIRECT_URL_PREFIX)) {
+		if (viewName.startsWith(REDIRECT_URL_PREFIX)) { //检查是否为redirect视图
 			String redirectUrl = viewName.substring(REDIRECT_URL_PREFIX.length());
 			RedirectView view = new RedirectView(redirectUrl, isRedirectContextRelative(), isRedirectHttp10Compatible());
 			view.setHosts(getRedirectHosts());
 			return applyLifecycleMethods(viewName, view);
 		}
 		// Check for special "forward:" prefix.
-		if (viewName.startsWith(FORWARD_URL_PREFIX)) {
+		if (viewName.startsWith(FORWARD_URL_PREFIX)) {//检查是不是forward视图
 			String forwardUrl = viewName.substring(FORWARD_URL_PREFIX.length());
 			return new InternalResourceView(forwardUrl);
 		}
@@ -504,8 +504,8 @@ public class UrlBasedViewResolver extends AbstractCachingViewResolver implements
 	 */
 	@Override
 	protected View loadView(String viewName, Locale locale) throws Exception {
-		AbstractUrlBasedView view = buildView(viewName);
-		View result = applyLifecycleMethods(viewName, view);
+		AbstractUrlBasedView view = buildView(viewName);//使用buidView创建View
+		View result = applyLifecycleMethods(viewName, view);//创建View进行初始化
 		return (view.checkResource(locale) ? result : null);
 	}
 
@@ -539,7 +539,7 @@ public class UrlBasedViewResolver extends AbstractCachingViewResolver implements
 		view.setRequestContextAttribute(getRequestContextAttribute());
 		view.setAttributesMap(getAttributesMap());
 
-		Boolean exposePathVariables = getExposePathVariables();
+		Boolean exposePathVariables = getExposePathVariables();//如果exposePathVariables不为空。将其值设置给View，用于标示让View使用PathVariables
 		if (exposePathVariables != null) {
 			view.setExposePathVariables(exposePathVariables);
 		}

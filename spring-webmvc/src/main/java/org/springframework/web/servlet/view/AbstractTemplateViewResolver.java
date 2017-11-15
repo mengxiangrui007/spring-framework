@@ -101,11 +101,11 @@ public class AbstractTemplateViewResolver extends UrlBasedViewResolver {
 	@Override
 	protected AbstractUrlBasedView buildView(String viewName) throws Exception {
 		AbstractTemplateView view = (AbstractTemplateView) super.buildView(viewName);
-		view.setExposeRequestAttributes(this.exposeRequestAttributes);
-		view.setAllowRequestOverride(this.allowRequestOverride);
-		view.setExposeSessionAttributes(this.exposeSessionAttributes);
-		view.setAllowSessionOverride(this.allowSessionOverride);
-		view.setExposeSpringMacroHelpers(this.exposeSpringMacroHelpers);
+		view.setExposeRequestAttributes(this.exposeRequestAttributes);//是否将RequestAttributes暴露给view使用，默认为false
+		view.setAllowRequestOverride(this.allowRequestOverride);//当RequestAttributes中存在Model中同名的参数时，是否允许使用RequestAttributes中的值将Model中的值覆盖
+		view.setExposeSessionAttributes(this.exposeSessionAttributes);//是否所有SessionAttributes暴露给View
+		view.setAllowSessionOverride(this.allowSessionOverride);//当SessionAttributes中存在Model中同名的参数时，是否允许使用RequestAttributes中的值将Model中的值覆盖
+		view.setExposeSpringMacroHelpers(this.exposeSpringMacroHelpers);//是否将RequestContext暴露给view为spring的宏使用
 		return view;
 	}
 

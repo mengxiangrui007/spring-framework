@@ -174,11 +174,11 @@ public class ContentNegotiatingViewResolver extends WebApplicationObjectSupport
 
 	@Override
 	protected void initServletContext(ServletContext servletContext) {
-		Collection<ViewResolver> matchingBeans =
+		Collection<ViewResolver> matchingBeans =//获取容器中所有ViewResolver类型的bean,注意这里是从整个spring容器而不是SpringMVC容器中获取的
 				BeanFactoryUtils.beansOfTypeIncludingAncestors(getApplicationContext(), ViewResolver.class).values();
 		if (this.viewResolvers == null) {
 			this.viewResolvers = new ArrayList<ViewResolver>(matchingBeans.size());
-			for (ViewResolver viewResolver : matchingBeans) {
+			for (ViewResolver viewResolver : matchingBeans) {//如果没有手动注册则将容器中找到ViewResolver设置给ViewResolvers
 				if (this != viewResolver) {
 					this.viewResolvers.add(viewResolver);
 				}
@@ -215,10 +215,10 @@ public class ContentNegotiatingViewResolver extends WebApplicationObjectSupport
 	public View resolveViewName(String viewName, Locale locale) throws Exception {
 		RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
 		Assert.state(attrs instanceof ServletRequestAttributes, "No current ServletRequestAttributes");
-		List<MediaType> requestedMediaTypes = getMediaTypes(((ServletRequestAttributes) attrs).getRequest());
+		List<MediaType> requestedMediaTypes = getMediaTypes(((ServletRequestAttributes) attrs).getRequest());//使用request获取MediaType
 		if (requestedMediaTypes != null) {
-			List<View> candidateViews = getCandidateViews(viewName, locale, requestedMediaTypes);
-			View bestView = getBestView(candidateViews, requestedMediaTypes, attrs);
+			List<View> candidateViews = getCandidateViews(viewName, locale, requestedMediaTypes);//获取所有候选视图
+			View bestView = getBestView(candidateViews, requestedMediaTypes, attrs);//从候选视图中找出最优视图
 			if (bestView != null) {
 				return bestView;
 			}
@@ -300,16 +300,16 @@ public class ContentNegotiatingViewResolver extends WebApplicationObjectSupport
 			if (view != null) {
 				candidateViews.add(view);
 			}
-			for (MediaType requestedMediaType : requestedMediaTypes) {
-				List<String> extensions = this.contentNegotiationManager.resolveFileExtensions(requestedMediaType);
-				for (String extension : extensions) {
+ 			for (MediaType requestedMediaType : requestedMediaTypes) {
+  				List<String> extensions = this.contentNegotiationManager.resolveFileExtensions(requestedMediaType);
+  				for (String extension : extensions) {
 					String viewNameWithExtension = viewName + '.' + extension;
 					view = viewResolver.resolveViewName(viewNameWithExtension, locale);
 					if (view != null) {
 						candidateViews.add(view);
 					}
 				}
-			}
+                 			}
 		}
 		if (!CollectionUtils.isEmpty(this.defaultViews)) {
 			candidateViews.addAll(this.defaultViews);
@@ -321,7 +321,7 @@ public class ContentNegotiatingViewResolver extends WebApplicationObjectSupport
 		for (View candidateView : candidateViews) {
 			if (candidateView instanceof SmartView) {
 				SmartView smartView = (SmartView) candidateView;
-				if (smartView.isRedirectView()) {
+				if (smartView.isRedirectView()) { //判定出候选视图中有没有Redirect视图，如果有直接将其返回
 					if (logger.isDebugEnabled()) {
 						logger.debug("Returning redirect view [" + candidateView + "]");
 					}
@@ -332,8 +332,8 @@ public class ContentNegotiatingViewResolver extends WebApplicationObjectSupport
 		for (MediaType mediaType : requestedMediaTypes) {
 			for (View candidateView : candidateViews) {
 				if (StringUtils.hasText(candidateView.getContentType())) {
-					MediaType candidateContentType = MediaType.parseMediaType(candidateView.getContentType());
-					if (mediaType.isCompatibleWith(candidateContentType)) {
+					MediaType candidateContentType = MediaType.parseMediaType(candidateView.getContentType());//获取候选视图MediaType
+					if (mediaType.isCompatibleWith(candidateContentType)) {//判定当前MediaType是否支持从候选视图获取对应的MediaType
 						if (logger.isDebugEnabled()) {
 							logger.debug("Returning [" + candidateView + "] based on requested media type '" +
 									mediaType + "'");
