@@ -39,7 +39,7 @@ import org.springframework.web.util.WebUtils;
 /**
  * Servlet-based {@link MultipartResolver} implementation for
  * <a href="http://commons.apache.org/proper/commons-fileupload">Apache Commons FileUpload</a>
- * 1.2 or above.
+ * 1.2 or above.	使用的Apache commons-fileupload上传方式
  *
  * <p>Provides "maxUploadSize", "maxInMemorySize" and "defaultEncoding" settings as
  * bean properties (inherited from {@link CommonsFileUploadSupport}). See corresponding
@@ -155,7 +155,7 @@ public class CommonsMultipartResolver extends CommonsFileUploadSupport
 		String encoding = determineEncoding(request);
 		FileUpload fileUpload = prepareFileUpload(encoding);
 		try {
-			List<FileItem> fileItems = ((ServletFileUpload) fileUpload).parseRequest(request);
+			List<FileItem> fileItems = ((ServletFileUpload) fileUpload).parseRequest(request);//组件解析出fileItems
 			return parseFileItems(fileItems, encoding);
 		}
 		catch (FileUploadBase.SizeLimitExceededException ex) {

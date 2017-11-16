@@ -91,7 +91,7 @@ public class StandardMultipartHttpServletRequest extends AbstractMultipartHttpSe
 	private void parseRequest(HttpServletRequest request) {
 		try {
 			Collection<Part> parts = request.getParts();
-			this.multipartParameterNames = new LinkedHashSet<String>(parts.size());
+			this.multipartParameterNames = new LinkedHashSet<String>(parts.size()); //获取所有的Part,然后使用它们创建出MultipartFile，并保存到对应的属性
 			MultiValueMap<String, MultipartFile> files = new LinkedMultiValueMap<String, MultipartFile>(parts.size());
 			for (Part part : parts) {
 				String disposition = part.getHeader(CONTENT_DISPOSITION);

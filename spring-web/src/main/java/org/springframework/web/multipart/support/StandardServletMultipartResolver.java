@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartResolver;
 
 /**
  * Standard implementation of the {@link MultipartResolver} interface,
- * based on the Servlet 3.0 {@link javax.servlet.http.Part} API.
+ * based on the Servlet 3.0 {@link javax.servlet.http.Part} API.使用Servlet3.0标准的上传方式
  * To be added as "multipartResolver" bean to a Spring DispatcherServlet context,
  * without any extra configuration at the bean level (see below).
  *
@@ -66,7 +66,7 @@ public class StandardServletMultipartResolver implements MultipartResolver {
 
 	@Override
 	public boolean isMultipart(HttpServletRequest request) {
-		// Same check as in Commons FileUpload...
+		// Same check as in Commons FileUpload...  判定是否为文件上传
 		if (!"post".equals(request.getMethod().toLowerCase())) {
 			return false;
 		}
@@ -76,7 +76,7 @@ public class StandardServletMultipartResolver implements MultipartResolver {
 
 	@Override
 	public MultipartHttpServletRequest resolveMultipart(HttpServletRequest request) throws MultipartException {
-		return new StandardMultipartHttpServletRequest(request, this.resolveLazily);
+		return new StandardMultipartHttpServletRequest(request, this.resolveLazily); //把当前的request封装为StandardMultipartHttpServletRequest对象
 	}
 
 	@Override
