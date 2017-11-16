@@ -96,7 +96,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 			logger.debug("Retrieved FlashMap(s): " + allFlashMaps);
 		}
 		List<FlashMap> mapsToRemove = getExpiredFlashMaps(allFlashMaps);
-		FlashMap match = getMatchingFlashMap(allFlashMaps, request);
+		FlashMap match = getMatchingFlashMap(allFlashMaps, request); //获取从allFlashMaps和request相匹配的FlashMap
 		if (match != null) {
 			mapsToRemove.add(match);
 		}
@@ -163,7 +163,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 	 * Uses the expected request path and query parameters saved in the FlashMap.
 	 */
 	protected boolean isFlashMapForRequest(FlashMap flashMap, HttpServletRequest request) {
-		String expectedPath = flashMap.getTargetRequestPath();
+		String expectedPath = flashMap.getTargetRequestPath();//检查目标路径，如果FlashMap中保存的路径和Request不匹配则返回false
 		if (expectedPath != null) {
 			String requestUri = getUrlPathHelper().getOriginatingRequestUri(request);
 			if (!requestUri.equals(expectedPath) && !requestUri.equals(expectedPath + "/")) {
@@ -172,7 +172,7 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 		}
 		MultiValueMap<String, String> actualParams = getOriginatingRequestParams(request);
 		MultiValueMap<String, String> expectedParams = flashMap.getTargetRequestParams();
-		for (String expectedName : expectedParams.keySet()) {
+		for (String expectedName : expectedParams.keySet()) {//检查参数，如果FlashMap中保存的url参数在Request中没有则返回false
 			List<String> actualValues = actualParams.get(expectedName);
 			if (actualValues == null) {
 				return false;
@@ -197,17 +197,17 @@ public abstract class AbstractFlashMapManager implements FlashMapManager {
 			return;
 		}
 
-		String path = decodeAndNormalizePath(flashMap.getTargetRequestPath(), request);
+		String path = decodeAndNormalizePath(flashMap.getTargetRequestPath(), request); //首先通过flashmap中的转发地址和参数进行编码，这里的request主要获取当前编码方式
 		flashMap.setTargetRequestPath(path);
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Saving FlashMap=" + flashMap);
 		}
-		flashMap.startExpirationPeriod(getFlashMapTimeout());
+		flashMap.startExpirationPeriod(getFlashMapTimeout()); //设置过期时间
 
 		Object mutex = getFlashMapsMutex(request);
 		if (mutex != null) {
-			synchronized (mutex) {
+			synchronized (mutex) {//用于获取互斥变量，是模板方法，如果子类返回值不为空则同步执行，负责不同步
 				List<FlashMap> allFlashMaps = retrieveFlashMaps(request);
 				allFlashMaps = (allFlashMaps != null ? allFlashMaps : new CopyOnWriteArrayList<FlashMap>());
 				allFlashMaps.add(flashMap);
