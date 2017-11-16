@@ -105,7 +105,7 @@ public class CookieThemeResolver extends CookieGenerator implements ThemeResolve
 	@Override
 	public void setThemeName(HttpServletRequest request, HttpServletResponse response, String themeName) {
 		if (StringUtils.hasText(themeName)) {
-			// Set request attribute and add cookie.
+			// Set request attribute and add cookie. 设置主题Cookie 同时设置到request中方便使用
 			request.setAttribute(THEME_REQUEST_ATTRIBUTE_NAME, themeName);
 			addCookie(response, themeName);
 		}

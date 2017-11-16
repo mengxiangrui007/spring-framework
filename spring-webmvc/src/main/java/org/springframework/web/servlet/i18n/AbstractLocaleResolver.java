@@ -30,7 +30,7 @@ import org.springframework.web.servlet.LocaleResolver;
  */
 public abstract class AbstractLocaleResolver implements LocaleResolver {
 
-	private Locale defaultLocale;
+	private Locale defaultLocale;//添加默认Local
 
 
 	/**

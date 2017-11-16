@@ -38,7 +38,7 @@ import org.springframework.web.servlet.LocaleContextResolver;
  */
 public abstract class AbstractLocaleContextResolver extends AbstractLocaleResolver implements LocaleContextResolver {
 
-	private TimeZone defaultTimeZone;
+	private TimeZone defaultTimeZone;//添加时区属性
 
 
 	/**

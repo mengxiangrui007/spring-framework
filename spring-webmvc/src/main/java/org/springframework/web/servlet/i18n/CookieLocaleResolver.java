@@ -214,7 +214,7 @@ public class CookieLocaleResolver extends CookieGenerator implements LocaleConte
 							"'" + (timeZone != null ? " and time zone '" + timeZone.getID() + "'" : ""));
 				}
 			}
-			request.setAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME,
+			request.setAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME,  //同时把local与zone设置到request中方便使用
 					(locale != null ? locale : determineDefaultLocale(request)));
 			request.setAttribute(TIME_ZONE_REQUEST_ATTRIBUTE_NAME,
 					(timeZone != null ? timeZone : determineDefaultTimeZone(request)));

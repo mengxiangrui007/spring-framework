@@ -108,7 +108,7 @@ public class SessionLocaleResolver extends AbstractLocaleContextResolver {
 	@Override
 	public Locale resolveLocale(HttpServletRequest request) {
 		Locale locale = (Locale) WebUtils.getSessionAttribute(request, this.localeAttributeName);
-		if (locale == null) {
+		if (locale == null) {//从session中获取如果获取不到Local 获取默认的Local
 			locale = determineDefaultLocale(request);
 		}
 		return locale;
