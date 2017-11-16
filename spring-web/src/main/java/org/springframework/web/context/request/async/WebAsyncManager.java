@@ -65,25 +65,25 @@ public final class WebAsyncManager {
 	private static final UrlPathHelper urlPathHelper = new UrlPathHelper();
 
 	private static final CallableProcessingInterceptor timeoutCallableInterceptor =
-			new TimeoutCallableProcessingInterceptor();
+			new TimeoutCallableProcessingInterceptor();//专门用于Callable和webAsyncTask类型的超时拦截器
 
 	private static final DeferredResultProcessingInterceptor timeoutDeferredResultInterceptor =
-			new TimeoutDeferredResultProcessingInterceptor();
+			new TimeoutDeferredResultProcessingInterceptor();//专门用于DeferredResult和ListenableFuture类型的超时拦截器
 
 
-	private AsyncWebRequest asyncWebRequest;
+	private AsyncWebRequest asyncWebRequest; //异步请求Request
 
-	private AsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor(this.getClass().getSimpleName());
+	private AsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor(this.getClass().getSimpleName());//用于执行Callable和WebAsyncTask类型处理
 
 	private Object concurrentResult = RESULT_NONE;
 
 	private Object[] concurrentResultContext;
 
 	private final Map<Object, CallableProcessingInterceptor> callableInterceptors =
-			new LinkedHashMap<Object, CallableProcessingInterceptor>();
+			new LinkedHashMap<Object, CallableProcessingInterceptor>();//用于Callable和webAsyncTask类型拦截器
 
 	private final Map<Object, DeferredResultProcessingInterceptor> deferredResultInterceptors =
-			new LinkedHashMap<Object, DeferredResultProcessingInterceptor>();
+			new LinkedHashMap<Object, DeferredResultProcessingInterceptor>();//用于DeferredResult和ListenableFuture类型拦截器
 
 
 	/**
@@ -271,23 +271,23 @@ public final class WebAsyncManager {
 
 		Long timeout = webAsyncTask.getTimeout();
 		if (timeout != null) {
-			this.asyncWebRequest.setTimeout(timeout);
+			this.asyncWebRequest.setTimeout(timeout);	//设置当前Request的超时时间
 		}
 
 		AsyncTaskExecutor executor = webAsyncTask.getExecutor();
 		if (executor != null) {
-			this.taskExecutor = executor;
+			this.taskExecutor = executor; //设置taskExecutor
 		}
 
 		List<CallableProcessingInterceptor> interceptors = new ArrayList<CallableProcessingInterceptor>();
-		interceptors.add(webAsyncTask.getInterceptor());
-		interceptors.addAll(this.callableInterceptors.values());
-		interceptors.add(timeoutCallableInterceptor);
+		interceptors.add(webAsyncTask.getInterceptor()); //webAsyncTask中所有的拦截器
+		interceptors.addAll(this.callableInterceptors.values());//callableInterceptors属性包含的拦截器
+		interceptors.add(timeoutCallableInterceptor);//超时拦截器
 
-		final Callable<?> callable = webAsyncTask.getCallable();
+		final Callable<?> callable = webAsyncTask.getCallable();//取出真正执行的Callable
 		final CallableInterceptorChain interceptorChain = new CallableInterceptorChain(interceptors);
 
-		this.asyncWebRequest.addTimeoutHandler(new Runnable() {
+		this.asyncWebRequest.addTimeoutHandler(new Runnable() {//给request设置超时处理器
 			@Override
 			public void run() {
 				logger.debug("Processing timeout");
@@ -298,7 +298,7 @@ public final class WebAsyncManager {
 			}
 		});
 
-		if (this.asyncWebRequest instanceof StandardServletAsyncWebRequest) {
+		if (this.asyncWebRequest instanceof StandardServletAsyncWebRequest) {//设置出现错误处理器
 			((StandardServletAsyncWebRequest) this.asyncWebRequest).setErrorHandler(
 					new StandardServletAsyncWebRequest.ErrorHandler() {
 						@Override
@@ -308,7 +308,7 @@ public final class WebAsyncManager {
 					});
 		}
 
-		this.asyncWebRequest.addCompletionHandler(new Runnable() {
+		this.asyncWebRequest.addCompletionHandler(new Runnable() {//请求完成的处理器
 			@Override
 			public void run() {
 				interceptorChain.triggerAfterCompletion(asyncWebRequest, callable);
@@ -316,8 +316,8 @@ public final class WebAsyncManager {
 		});
 
 		interceptorChain.applyBeforeConcurrentHandling(this.asyncWebRequest, callable);
-		startAsyncProcessing(processingContext);
-		try {
+		startAsyncProcessing(processingContext);//启动异步处理
+		try {//使用taskExecutor执行请求 new Runnable()防止阻塞线程。和可以调用拦截器
 			Future<?> future = this.taskExecutor.submit(new Runnable() {
 				@Override
 				public void run() {
@@ -395,7 +395,7 @@ public final class WebAsyncManager {
 		interceptors.addAll(this.deferredResultInterceptors.values());
 		interceptors.add(timeoutDeferredResultInterceptor);
 
-		final DeferredResultInterceptorChain interceptorChain = new DeferredResultInterceptorChain(interceptors);
+		final DeferredResultInterceptorChain interceptorChain = new DeferredResultInterceptorChain(interceptors);//此处使用的是责任链模式
 
 		this.asyncWebRequest.addTimeoutHandler(new Runnable() {
 			@Override
@@ -445,9 +445,9 @@ public final class WebAsyncManager {
 	}
 
 	private void startAsyncProcessing(Object[] processingContext) {
-		clearConcurrentResult();
+		clearConcurrentResult();//清空并发处理的结果
 		this.concurrentResultContext = processingContext;
-		this.asyncWebRequest.startAsync();
+		this.asyncWebRequest.startAsync();//启动异步操作
 
 		if (logger.isDebugEnabled()) {
 			HttpServletRequest request = this.asyncWebRequest.getNativeRequest(HttpServletRequest.class);

@@ -56,7 +56,7 @@ public class ListenableFutureReturnValueHandler implements AsyncHandlerMethodRet
 			return;
 		}
 
-		final DeferredResult<Object> deferredResult = new DeferredResult<Object>();
+		final DeferredResult<Object> deferredResult = new DeferredResult<Object>();//新建DefferedResult
 		WebAsyncUtils.getAsyncManager(webRequest).startDeferredResultProcessing(deferredResult, mavContainer);
 
 		ListenableFuture<?> future = (ListenableFuture<?>) returnValue;

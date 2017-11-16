@@ -33,19 +33,19 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class WebAsyncTask<V> implements BeanFactoryAware {
 
-	private final Callable<V> callable;
+	private final Callable<V> callable;//实际处理请求
 
-	private Long timeout;
+	private Long timeout;//设置超时时间
 
-	private AsyncTaskExecutor executor;
+	private AsyncTaskExecutor executor;//用来调用Callable
 
-	private String executorName;
+	private String executorName;//用于获取executor
 
 	private BeanFactory beanFactory;
 
-	private Callable<V> timeoutCallback;
+	private Callable<V> timeoutCallback;//执行超时回调
 
-	private Runnable completionCallback;
+	private Runnable completionCallback;//执行请求完成回调
 
 
 	/**

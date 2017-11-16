@@ -20,7 +20,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * Extends {@link NativeWebRequest} with methods for asynchronous request processing.
- *
+ * SpringMVC自定义异步Request
  * @author Rossen Stoyanchev
  * @since 3.2
  */
@@ -36,11 +36,11 @@ public interface AsyncWebRequest extends NativeWebRequest {
 	void setTimeout(Long timeout);
 
 	/**
-	 * Add a handler to invoke when concurrent handling has timed out.
+	 * Add a handler to invoke when concurrent handling has timed out.添加并发请求时超时时间 相当于AsyncListener的onTimeout方法
 	 */
 	void addTimeoutHandler(Runnable runnable);
 
-	/**
+	/**请求处理完后的处理器 相当于AsyncListener的onComplete方法
 	 * Add a handle to invoke when request processing completes.
 	 */
 	void addCompletionHandler(Runnable runnable);

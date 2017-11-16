@@ -31,7 +31,7 @@ import java.util.concurrent.Future;
  */
 public interface ListenableFuture<T> extends Future<T> {
 
-	/**
+	/**用于处理两个异常处理成功的返回值和异常处理失败的返回值
 	 * Register the given {@code ListenableFutureCallback}.
 	 * @param callback the callback to register
 	 */

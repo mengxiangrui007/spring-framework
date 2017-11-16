@@ -104,7 +104,7 @@ public class DeferredResultMethodReturnValueHandler implements AsyncHandlerMetho
 					"Could not find DeferredResultAdapter for return value type: " + returnValue.getClass());
 		}
 		DeferredResult<?> result = adapter.adaptToDeferredResult(returnValue);
-		WebAsyncUtils.getAsyncManager(webRequest).startDeferredResultProcessing(result, mavContainer);
+		WebAsyncUtils.getAsyncManager(webRequest).startDeferredResultProcessing(result, mavContainer);//开启延迟请求处理
 	}
 
 

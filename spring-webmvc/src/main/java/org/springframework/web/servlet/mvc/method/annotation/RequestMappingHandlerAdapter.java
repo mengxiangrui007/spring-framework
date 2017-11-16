@@ -806,7 +806,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
 
 			AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);
-			asyncWebRequest.setTimeout(this.asyncRequestTimeout);
+			asyncWebRequest.setTimeout(this.asyncRequestTimeout); //设置异步请求超时时间
 
 			WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 			asyncManager.setTaskExecutor(this.taskExecutor);
@@ -816,12 +816,12 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 			if (asyncManager.hasConcurrentResult()) {
 				Object result = asyncManager.getConcurrentResult();
-				mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[0];
+				mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[0]; //如果异步请求有结果取出mavContainer
 				asyncManager.clearConcurrentResult();
 				if (logger.isDebugEnabled()) {
 					logger.debug("Found concurrent result value [" + result + "]");
 				}
-				invocableMethod = invocableMethod.wrapConcurrentResult(result);
+				invocableMethod = invocableMethod.wrapConcurrentResult(result);//此处异步请求不做任何操作，如果有异常则抛出异常 替换异步请求处理
 			}
 
 			invocableMethod.invokeAndHandle(webRequest, mavContainer);//执行请求

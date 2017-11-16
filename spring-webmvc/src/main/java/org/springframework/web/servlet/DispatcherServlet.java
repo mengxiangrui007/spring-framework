@@ -1008,7 +1008,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 		finally {
 			if (asyncManager.isConcurrentHandlingStarted()) {
-				// Instead of postHandle and afterCompletion  是否为移除请求如果是异步请求调用相应的异步处理的拦截器
+				// Instead of postHandle and afterCompletion  是否为异步请求如果是异步请求调用相应的异步处理的拦截器
 				if (mappedHandler != null) {
 					mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);
 				}

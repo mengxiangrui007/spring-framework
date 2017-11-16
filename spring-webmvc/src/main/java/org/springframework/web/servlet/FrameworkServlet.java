@@ -962,7 +962,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		ServletRequestAttributes requestAttributes = buildRequestAttributes(request, response, previousAttributes);
 
 		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
-		asyncManager.registerCallableInterceptor(FrameworkServlet.class.getName(), new RequestBindingInterceptor());
+		asyncManager.registerCallableInterceptor(FrameworkServlet.class.getName(), new RequestBindingInterceptor());//添加拦截器用于设置LocalContextHolder和RequestContextHolder
 
 		initContextHolders(request, localeContext, requestAttributes);
 
